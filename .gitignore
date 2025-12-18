@@ -37,9 +37,7 @@ submission/*.csv
 .DS_Store
 Thumbs.db
 
-# Temporary/helper files
-download_ffmpeg.py
-INSTALL_FFMPEG.md
+# Temporary/helper files (removed - no longer needed)
 
 # LanguageTool cache (large, auto-downloaded)
 .language_tool/
