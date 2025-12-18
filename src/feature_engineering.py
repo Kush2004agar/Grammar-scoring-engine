@@ -1,15 +1,17 @@
 """
-Grammar-focused feature engineering.
+Extract grammar features from text.
 
-This module extracts *interpretable* text-based features from cleaned
-transcripts, aligned with how human raters think about spoken grammar:
+This is where we turn text into numbers that a machine learning model
+can understand. We look for things like:
+- How many grammar errors are there?
+- Are the sentences complete?
+- How complex is the sentence structure?
 
-- Error density (via a rule-based grammar checker).
-- Sentence and clause completeness.
-- POS and dependency-based indicators of complexity.
+All features are designed to be interpretable—you should be able to
+understand what each one means without a PhD in linguistics.
 
-Deep or opaque representations (e.g. transformers) are deliberately
-excluded at this baseline stage.
+We deliberately avoid "black box" features (like deep learning embeddings)
+at this stage, so the model stays transparent and explainable.
 """
 
 from __future__ import annotations

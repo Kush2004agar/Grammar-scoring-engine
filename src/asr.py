@@ -1,11 +1,17 @@
 """
-Automatic Speech Recognition (ASR) utilities using Whisper.
+Convert speech to text using Whisper.
 
-This module keeps the ASR step:
-- Reproducible: transcripts are cached to CSV under ``data/asr_cache``.
-- Inspectable: we log basic statistics and preserve decoding settings.
-- Assessment-aligned: we do *not* modify or correct grammar here; we only
-  convert audio to text as faithfully as possible.
+This is where the magic happens—we take audio files and turn them into text
+that we can analyze for grammar.
+
+Key features:
+- Uses OpenAI's Whisper (it's really good at this!)
+- Caches transcripts so we don't have to re-transcribe everything
+- Handles errors gracefully (some audio files might be problematic)
+- Shows progress so you know it's working (transcribing can take a while)
+
+Important: We don't fix grammar here—we just convert speech to text as
+accurately as possible. Grammar scoring happens later.
 """
 
 from __future__ import annotations

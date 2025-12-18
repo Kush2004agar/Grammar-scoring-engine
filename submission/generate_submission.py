@@ -1,15 +1,14 @@
 """
-Generate an SHL submission file using the final selected model.
+Generate the final submission file for the competition.
 
-This script assumes that:
-- ASR transcripts have been cached.
-- Cleaned transcripts and grammar features have been computed for train
-  and test.
-- A final model has been trained and saved to disk.
+This script takes your trained model and generates predictions for all
+the test audio files, then saves them in the format the competition expects.
 
-The script reloads the model and preprocessing objects, computes
-predictions for the test set, and writes ``submission.csv`` in the
-required SHL competition format.
+Before running this:
+1. Make sure you've trained the model (run train_baseline.py)
+2. Make sure test audio files are transcribed (this will happen automatically)
+
+The output is a CSV file with two columns: filename and label (the predicted score).
 """
 
 from __future__ import annotations

@@ -1,13 +1,17 @@
 """
-Spoken-language text cleaning for ASR transcripts.
+Clean up spoken language text.
 
-Design principles
------------------
-- Minimal and conservative: we remove construct-irrelevant noise such as
-  non-lexical fillers and clear stutter-like repetitions.
-- Non-corrective: we *never* fix or normalise grammar or meaning.
-- Reproducible: every rule is deterministic and documented here so that
-  assessment reviewers can trace its impact.
+When people speak, they say things like "um", "uh", and repeat words.
+This module removes that stuff so we can focus on the actual grammar.
+
+Important: We DON'T fix grammar mistakes! If someone says "he go" instead
+of "he goes", we keep it as "he go" because that's what they actually said,
+and we want to score their actual grammar, not what we think they meant.
+
+Design principles:
+- Minimal: Only remove obvious noise (fillers, stutters)
+- Conservative: When in doubt, keep the original
+- Reproducible: Same input always gives same output
 """
 
 from __future__ import annotations

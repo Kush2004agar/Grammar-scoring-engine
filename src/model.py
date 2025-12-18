@@ -1,9 +1,16 @@
 """
-Baseline modelling for grammar score prediction.
+Train and evaluate the grammar scoring model.
 
-We deliberately use simple, interpretable models (Linear/Ridge regression)
-on top of human-readable grammar features. This keeps the system auditable
-for assessment scientists while still providing competitive performance.
+We use Ridge Regression—it's simple, interpretable, and doesn't require
+a supercomputer to run. The model learns which grammar features predict
+higher or lower scores.
+
+Key features:
+- Uses cross-validation to make sure we're not just memorizing
+- Shows which features matter most (feature importance)
+- Fixes random seeds so results are reproducible
+
+We deliberately keep it simple and transparent, not a black box.
 """
 
 from __future__ import annotations
