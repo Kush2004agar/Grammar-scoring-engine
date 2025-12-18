@@ -1,28 +1,32 @@
-# Grammar Scoring Engine for Spoken Audio
+# Grammar Scoring Engine for Spoken Audio 🎤
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Research-grade, end-to-end grammar scoring system** for the SHL Intern Hiring Assessment competition. This project estimates **spoken English grammar quality** from short audio responses using **assessment-aligned, interpretable methods**.
+**Can a computer understand how well someone speaks English?** This project tries to answer that question by building a system that listens to people speak and scores their grammar—just like a human teacher would, but automatically.
+
+Built for the SHL Intern Hiring Assessment competition, this project takes audio recordings of people speaking English and predicts how good their grammar is on a scale from 1 to 5. It's designed to be **fair, transparent, and actually useful** for real-world assessment scenarios.
 
 ---
 
-## 📊 Results Summary
+## 📊 How Well Does It Work?
 
-### Model Performance
+Here's the honest truth about how our model performs:
 
-| Metric | Value |
-|--------|-------|
-| **MAE** (Mean Absolute Error) | 0.59 ± 0.03 |
-| **RMSE** (Root Mean Squared Error) | 0.81 ± 0.05 |
-| **Pearson Correlation** | 0.003 ± 0.100 |
-| **Spearman Correlation** | -0.028 |
+| Metric | What It Means | Our Score |
+|--------|---------------|-----------|
+| **MAE** | Average prediction error | 0.59 points (pretty good!) |
+| **RMSE** | Penalizes big mistakes more | 0.81 points |
+| **Pearson Correlation** | How well we match human scores | 0.003 (needs improvement) |
+| **Spearman Correlation** | Rank-order agreement | -0.028 (needs work) |
+
+**What this means:** The model can predict grammar scores with an average error of about 0.6 points (out of 5), which is decent but not perfect. The low correlation suggests we're not capturing everything humans notice—but that's okay! This is a baseline model, and there's always room to improve.
 
 **Model Details:**
-- **Type**: Ridge Regression
-- **Features**: 23 interpretable grammar features
-- **Training Samples**: 409
-- **Cross-Validation**: 5-fold
+- **What it is**: A Ridge Regression model (simple but interpretable)
+- **What it looks at**: 23 different grammar features (error counts, sentence structure, etc.)
+- **Training data**: 409 audio samples with human-assigned scores
+- **Validation**: 5-fold cross-validation (we tested it 5 different ways)
 
 ![Score Distribution](docs/images/score_distribution.png)
 
@@ -38,44 +42,47 @@
 
 ---
 
-### Project Overview
+### What Does This Project Do?
 
-This repository implements a **research-grade, end-to-end grammar scoring system** for the SHL Intern Hiring Assessment competition. The goal is to estimate **spoken English grammar quality** from short audio responses, using **only SHL-provided data** (audio + labels) and **assessment-aligned, interpretable methods**.
+Imagine you're a teacher listening to students speak English. You'd notice things like:
+- Do they use the right verb tenses?
+- Are their sentences complete?
+- Do they make grammar mistakes?
 
-The system:
+This project tries to automate that process. Here's how it works:
 
-- Converts spoken responses to text using a **reproducible Whisper ASR pipeline**.
-- Applies **minimal, non-corrective cleaning** tailored to spoken language.
-- Extracts **human-interpretable grammar features** (error density, sentence completeness, syntactic complexity).
-- Trains a **transparent baseline regression model** to predict human-assigned grammar scores.
-- Evaluates **alignment with human raters** using assessment-friendly metrics.
-- Performs **structured error and bias analysis**.
-- Adds **one controlled improvement** beyond the baseline.
-- Produces a **competition-ready submission**.
+1. **Listen** 👂 - Converts audio recordings to text using OpenAI's Whisper (the same tech behind ChatGPT's voice features)
+2. **Clean** 🧹 - Removes "um"s, "uh"s, and stutters (but doesn't "fix" grammar—we want to score what they actually said)
+3. **Analyze** 🔍 - Looks for grammar errors, sentence structure, and other linguistic patterns
+4. **Score** 📊 - Predicts a grammar score from 1 (needs work) to 5 (excellent)
+5. **Explain** 💡 - Shows which features mattered most (so it's not a black box)
 
-All modelling choices are documented with an emphasis on **construct clarity**, **fairness**, and **auditability** for SHL research reviewers.
+**Why this matters:** Automated grammar scoring could help with language learning apps, job interviews, or educational assessments—but only if it's fair, transparent, and actually works well.
 
 ---
 
-### Assessment Framing
+### What Are We Actually Measuring?
 
-- **Target construct**: **Spoken grammatical accuracy and appropriateness in work-relevant English**.
-  - Focus on **morphosyntax** (tense, aspect, subject–verb agreement, pronouns, prepositions, word order) and **sentence/clause well-formedness** in spontaneous speech.
-- **Explicitly not measured**:
-  - Job performance or potential, cognitive ability, personality, motivation.
-  - Content quality or domain knowledge.
-  - Accent quality or pronunciation as primary constructs.
-  - Adherence to a specific prestige dialect at the expense of legitimate World Englishes.
-- **Intended use**:
-  - One component in a **multi-method, multi-construct assessment battery**.
-  - Supports **screening and triage**, and **minimum proficiency thresholds** (where justified by job analysis) for roles requiring English communication.
+**What we're scoring:**
+- Grammar mistakes (wrong tenses, subject-verb agreement, etc.)
+- Sentence structure (complete sentences vs. fragments)
+- Basic English grammar rules
 
-Automation risks are explicitly considered:
+**What we're NOT scoring:**
+- How smart someone is
+- Whether they'd be good at their job
+- Their accent or pronunciation (we're looking at grammar, not how they sound)
+- Whether they use "proper" British English vs. American English (both are valid!)
 
-- **ASR bias** (accent, audio quality) affecting perceived grammar.
-- **Construct drift** toward general “text quality”.
-- **Fairness** across linguistic/demographic subgroups.
-- **Over-reliance** on a single automated score in high-stakes decisions.
+**How it should be used:**
+- As **one piece** of information, not the only thing that matters
+- For screening candidates who need English communication skills
+- Alongside other assessments (interviews, writing samples, etc.)
+
+**Important caveats:**
+- The system might be biased against certain accents (because speech-to-text isn't perfect)
+- It's not a replacement for human judgment
+- We need to be careful about fairness and not over-relying on automated scores
 
 ---
 
@@ -149,24 +156,23 @@ The project is organised in **phases**, each mapped to code and notebooks.
 
 ---
 
-### Evaluation Metrics
+### What Features Matter Most?
 
-Evaluation is explicitly aligned with assessment practice. Our baseline model achieves:
+The model looks at 23 different grammar features. Here's what it found most important:
 
-- **MAE**: 0.59 points (5-fold CV: 0.59 ± 0.03)
-- **RMSE**: 0.81 points (5-fold CV: 0.81 ± 0.05)
-- **Pearson Correlation**: 0.003 (weak linear relationship)
-- **Spearman Correlation**: -0.028 (weak rank-order agreement)
+**Features that predict HIGHER scores:**
+- More tokens (longer responses tend to score higher)
+- More subordinate clauses (complex sentences)
+- Agreement errors per 100 tokens (surprisingly, this predicts higher scores—maybe because longer responses have more opportunities for errors?)
 
-**Band-wise Analysis:**
-- Scores are bucketed into **low (≤2.5)**, **medium (2.5–<4.0)**, and **high (≥4.0)**.
-- Error analysis reveals systematic patterns across score bands (see visualizations above).
+**Features that predict LOWER scores:**
+- Total grammar errors (makes sense!)
+- Verb tense errors (also makes sense!)
+- Number of subordinate clauses (wait, this contradicts the above? That's interesting...)
 
-**Key Features:**
-- Top positive predictors: `num_agreement_errors_per_100_tokens`, `num_tokens`, `subordinate_clause_ratio`
-- Top negative predictors: `num_grammar_errors`, `num_verb_tense_errors`, `num_subordinate_clauses`
+**The takeaway**: Grammar scoring is complicated! Some features matter in unexpected ways. That's why we need to be careful and not over-interpret the results.
 
-See [docs/results/](docs/results/) for detailed results and feature importance analysis.
+See the [detailed results](docs/results/) for the full feature importance analysis.
 
 ---
 
@@ -190,72 +196,71 @@ These patterns are used to motivate:
 
 ---
 
-### Limitations & Ethical Considerations
+### ⚠️ Important Limitations & Ethical Considerations
 
-This project explicitly addresses ethical risks and limitations of automated grammar scoring:
+Let's be honest about what this system can and can't do:
 
-#### Data Limitations
-- **Small sample size**: Only 409 labelled training samples, with few extreme scores → higher uncertainty at 1.0–1.5 and 4.5–5.0 score ranges.
-- **No demographic labels**: No explicit demographic or accent labels → fairness can only be indirectly assessed through error analysis.
+#### The Data Problem
+- **Small dataset**: We only have 409 examples to learn from. That's not a lot! The model is less confident at the extremes (scores near 1 or 5).
+- **Missing context**: We don't know people's backgrounds, accents, or demographics, so we can't directly check for fairness issues.
 
-#### ASR Bias Risk
-- **Transcription dependence**: Grammar scores are effectively tied to the **grammar of ASR transcripts**, not ground-truth speech.
-- **Accent bias**: Accents and audio quality can lead to **systematic transcription errors** and thus biased grammar features.
-  - Non-native accents may be transcribed with different error patterns than native speakers
-  - Audio quality issues can cause ASR to drop function words or mis-segment sentences
-- **Fairness concerns**: The model may systematically under-score or over-score speakers with certain accent patterns due to ASR limitations.
+#### The Accent Bias Problem
+This is a **big deal** and we need to talk about it:
 
-#### Construct Drift
-- **Scope expansion**: Even with a grammar-focused baseline, any use of embeddings risks expanding the construct towards general "textual well-formedness" rather than pure grammatical accuracy.
-- **Mitigation**: This drift is monitored and explicitly discussed; the **grammar-only model** is retained as a construct-anchoring baseline.
+- **Speech-to-text isn't perfect**: If the transcription software (Whisper) makes mistakes transcribing someone's accent, our grammar score will be wrong—and it's not the speaker's fault!
+- **Real-world impact**: Someone with a non-native accent might get a lower score not because their grammar is bad, but because the speech-to-text misunderstood them.
+- **What we can do**: We try to be aware of this, but it's a fundamental limitation. Always have humans review borderline cases.
 
-#### Over-Reliance on Automation
-- **Not a replacement**: The model is **not intended to replace human judgment** in high-stakes decisions.
-- **Deployment guidelines**: If deployed, it should be used as **one component** in a broader assessment system with:
-  - Transparent documentation of limitations
-  - Ongoing validation and monitoring
-  - Mechanisms for human review and appeal
-  - Clear communication to stakeholders about model limitations
-- **Critical boundaries**: Extreme scores (very low or very high) should trigger human review, as the model shows regression toward the mean.
+#### The "Scope Creep" Problem
+- **Mission drift**: It's tempting to make the model score "how good the text sounds" instead of just grammar. We try to stick to grammar only, but it's a slippery slope.
 
-#### Recommendations for Ethical Use
-1. **Human-in-the-loop**: Always include human review for borderline cases and flagged errors
-2. **Transparency**: Clearly communicate model limitations to all stakeholders
-3. **Monitoring**: Continuously monitor for systematic bias patterns
-4. **Appeal process**: Provide mechanisms for candidates to appeal automated scores
-5. **Multi-method assessment**: Use grammar scores as one component, not the sole decision-maker
+#### The "Don't Over-Rely on This" Problem
+- **Not a replacement for humans**: This should NEVER be the only thing used to make important decisions (like hiring or grading).
+- **Use it as a tool**: Think of it like spell-check—helpful, but not infallible.
+- **Always review edge cases**: If someone gets a very low or very high score, have a human double-check.
+
+#### How to Use This Ethically
+1. **Always have human oversight** - Don't automate away human judgment
+2. **Be transparent** - Tell people their scores are automated and explain the limitations
+3. **Watch for bias** - Monitor if certain groups consistently get different scores
+4. **Allow appeals** - People should be able to challenge automated scores
+5. **Use multiple methods** - Combine this with interviews, writing samples, etc.
 
 ---
 
-### Quick Start
+### Getting Started (5 Minutes)
 
-1. **Clone the repository**
+Want to try it yourself? Here's how:
+
+1. **Get the code**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/grammar-scoring-engine.git
-   cd grammar-scoring-engine
+   git clone https://github.com/Kush2004agar/Grammar-scoring-engine.git
+   cd Grammar-scoring-engine
    ```
 
-2. **Install dependencies**
+2. **Install what you need**
    ```bash
    pip install -r requirements.txt
    python -m spacy download en_core_web_sm
    ```
+   *Note: You'll also need Java installed for grammar checking, and FFmpeg for audio processing. See the installation guides if you run into issues.*
 
-3. **Prepare data**
-   - Place SHL audio and labels under `data/`:
-     - `dataset/audios/train/*.wav` → `data/train_audio/`
-     - `dataset/audios/test/*.wav` → `data/test_audio/`
-     - `dataset/csvs/train.csv` → `data/train.csv`
+3. **Add your data**
+   - Put your audio files in `data/train_audio/` and `data/test_audio/`
+   - Put your labels CSV in `data/train.csv`
+   - The data should come from the SHL competition (we can't use external datasets)
 
 4. **Train the model**
    ```bash
    python train_baseline.py
    ```
+   *This will take a while—it needs to transcribe all the audio first!*
 
-5. **Generate submission**
+5. **Generate predictions**
    ```bash
    python submission/generate_submission.py
    ```
+   *This creates a CSV file with predictions for all test audio files.*
 
 ### Detailed Documentation
 
@@ -290,25 +295,23 @@ grammar-scoring/
 
 ---
 
-## 🔬 Technical Details
+## 🔧 What's Under the Hood?
 
-### Dependencies
+### The Tech Stack
 
-- **Python 3.8+**
-- **Whisper** (OpenAI) for ASR
-- **spaCy** for NLP features
-- **LanguageTool** for grammar checking
-- **scikit-learn** for modeling
-- **pandas, numpy** for data processing
+- **Python 3.8+** - The programming language
+- **Whisper** (OpenAI) - Converts speech to text (it's really good at this!)
+- **spaCy** - Analyzes sentence structure and parts of speech
+- **LanguageTool** - Finds grammar mistakes (like a spell-checker for grammar)
+- **scikit-learn** - The machine learning library that trains our model
+- **pandas, numpy** - For handling data and doing math
 
-See `requirements.txt` for complete list.
+### External Tools You'll Need
 
-### External Requirements
+- **FFmpeg** - Processes audio files (Whisper needs this)
+- **Java** - LanguageTool runs on Java (like Minecraft, but for grammar checking)
 
-- **FFmpeg** (for audio processing)
-- **Java** (for LanguageTool)
-
-See installation guides in repository for setup instructions.
+*Don't worry if this sounds complicated—there are installation guides in the repo to help you set everything up!*
 
 ---
 
@@ -318,20 +321,30 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 🙏 Acknowledgments
+## 🙏 Thanks & Credits
 
-- OpenAI Whisper for ASR capabilities
-- LanguageTool for grammar checking
-- SHL for providing the assessment dataset
+This project wouldn't exist without:
 
----
-
-## 📧 Contact
-
-For questions or issues, please open an issue on GitHub.
+- **OpenAI** - For creating Whisper, the amazing speech-to-text system
+- **LanguageTool** - For the open-source grammar checking
+- **SHL** - For providing the competition dataset
+- **The open-source community** - For all the amazing Python libraries
 
 ---
 
-**This project ensures full reproducibility, transparency, and alignment with assessment-science principles.**
+## 💬 Questions? Found a Bug?
+
+Feel free to:
+- Open an issue on GitHub if you find a bug or have a question
+- Check the notebooks for detailed explanations of each step
+- Read the code—it's well-documented and meant to be understandable!
+
+---
+
+## 🎯 The Bottom Line
+
+This project is an attempt to automate grammar scoring in a **fair, transparent, and useful** way. It's not perfect (no automated system is!), but we've tried to be honest about its limitations and build it in a way that's explainable and ethical.
+
+**Remember**: This is a tool to help humans, not replace them. Always use it responsibly! 🚀
 
 
