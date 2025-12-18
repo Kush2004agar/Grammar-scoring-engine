@@ -33,19 +33,22 @@ from src.feature_engineering import GrammarFeatureExtractor
 from src.model import train_baseline_model, cross_validate_baseline
 
 print("=" * 60)
-print("Training Baseline Grammar Scoring Model")
+print("Training the Grammar Scoring Model")
 print("=" * 60)
+print("(This might take a while, especially the ASR part...)")
 
 # Ensure directories exist
 ensure_directories()
 
 # Step 1: Load labels
 print("\n[1/5] Loading training labels...")
+print("    (Reading the CSV file with all the scores)")
 labels_df = load_train_labels()
 print(f"    Loaded {len(labels_df)} training examples")
 
 # Step 2: ASR transcription
 print("\n[2/5] Running ASR transcription...")
+print("    (Converting audio to text - this is the slow part)")
 train_audio_paths = list_audio_files("train")
 print(f"    Found {len(train_audio_paths)} audio files")
 
@@ -111,6 +114,7 @@ if len(asr_df) == 0:
 
 # Step 3: Text cleaning
 print("\n[3/5] Cleaning transcripts...")
+print("    (Removing 'um's and stutters, but keeping grammar mistakes)")
 cleaned_texts = []
 cleaning_stats = []
 for idx, transcript in enumerate(asr_df["transcript"].fillna("")):
@@ -151,6 +155,7 @@ if len(train_df) == 0:
 
 # Step 5: Feature extraction
 print("\n[5/5] Extracting grammar features...")
+print("    (Counting errors, analyzing sentence structure, etc.)")
 extractor = GrammarFeatureExtractor()
 X = extractor.transform(train_df["transcript_clean"].tolist())
 y = train_df["label"]
@@ -164,6 +169,7 @@ if X.shape[0] == 0:
 
 # Step 6: Cross-validation (optional, for diagnostics)
 print("\n[6/6] Running cross-validation...")
+print("    (Testing the model 5 different ways to make sure it's not just lucky)")
 cv_results = cross_validate_baseline(X, y, alpha=1.0)
 print("    CV Results:")
 for metric, value in cv_results.items():
@@ -171,6 +177,7 @@ for metric, value in cv_results.items():
 
 # Step 7: Train final model on all data
 print("\n[7/7] Training final model on all training data...")
+print("    (Now we use everything to build the final model)")
 artifacts = train_baseline_model(X, y, alpha=1.0)
 print("    Model trained successfully")
 
@@ -180,7 +187,9 @@ joblib.dump(artifacts, model_path)
 print(f"\n✓ Model saved to: {model_path}")
 
 print("\n" + "=" * 60)
-print("Training complete! You can now generate submissions with:")
-print(f"  python submission/generate_submission.py --model_path {model_path}")
+print("All done! 🎉")
+print("=" * 60)
+print("Now you can generate predictions with:")
+print(f"  python submission/generate_submission.py")
 print("=" * 60)
 

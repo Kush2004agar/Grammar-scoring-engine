@@ -56,6 +56,7 @@ def train_baseline_model(
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X.values)
 
+    # Use Ridge Regression - simple, interpretable, and actually works
     model = Ridge(alpha=alpha, random_state=training_config.random_seed)
     model.fit(X_scaled, y.values)
     return BaselineModelArtifacts(

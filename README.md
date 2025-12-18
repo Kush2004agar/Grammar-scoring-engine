@@ -1,36 +1,40 @@
-# Grammar Scoring Engine for Spoken Audio 🎤
+# Grammar Scoring Engine 🎤
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Can a computer understand how well someone speaks English?** This project tries to answer that question by building a system that listens to people speak and scores their grammar—just like a human teacher would, but automatically.
+So I built this thing that tries to score how good someone's English grammar is, just by listening to them talk. Wild, right?
 
-Built for the SHL Intern Hiring Assessment competition, this project takes audio recordings of people speaking English and predicts how good their grammar is on a scale from 1 to 5. It's designed to be **fair, transparent, and actually useful** for real-world assessment scenarios.
+It's for the SHL Intern Hiring Assessment competition. Basically, you give it audio of people speaking English, and it spits out a score from 1 to 5. Like a teacher grading your grammar, except... it's a computer. And it's not always right, but hey, neither are humans sometimes.
+
+The whole point was to make something that's actually fair and you can understand how it works—not just some black box that says "trust me, I'm AI."
 
 ---
 
-## 📊 How Well Does It Work?
+## So... How Good Is It Really?
 
-Here's the honest truth about how our model performs:
+Let me be straight with you. The results are... mixed.
 
-| Metric | What It Means | Our Score |
-|--------|---------------|-----------|
-| **MAE** | Average prediction error | 0.59 points (pretty good!) |
-| **RMSE** | Penalizes big mistakes more | 0.81 points |
-| **Pearson Correlation** | How well we match human scores | 0.003 (needs improvement) |
-| **Spearman Correlation** | Rank-order agreement | -0.028 (needs work) |
+| Metric | What It Means | What We Got |
+|--------|---------------|-------------|
+| **MAE** | Average how wrong we are | 0.59 points off (not terrible!) |
+| **RMSE** | Big mistakes hurt more | 0.81 points |
+| **Pearson** | Do we agree with humans? | 0.003 (basically no correlation, oops) |
+| **Spearman** | Rank-order agreement | -0.028 (also not great) |
 
-**What this means:** The model can predict grammar scores with an average error of about 0.6 points (out of 5), which is decent but not perfect. The low correlation suggests we're not capturing everything humans notice—but that's okay! This is a baseline model, and there's always room to improve.
+Yeah, the correlation is basically zero. That's... not ideal. But the MAE is decent—we're usually within 0.6 points, which isn't the worst thing in the world. The model definitely needs work, but it's a start.
 
-**Model Details:**
-- **What it is**: A Ridge Regression model (simple but interpretable)
-- **What it looks at**: 23 different grammar features (error counts, sentence structure, etc.)
-- **Training data**: 409 audio samples with human-assigned scores
-- **Validation**: 5-fold cross-validation (we tested it 5 different ways)
+**What we built:**
+- Ridge Regression (simple but you can actually understand it)
+- 23 different grammar features (error counts, sentence stuff, etc.)
+- Trained on 409 examples (not a ton, but it's what we had)
+- Tested 5 different ways to make sure we're not just lucky
 
 ![Score Distribution](docs/images/score_distribution.png)
 
 ![Predicted vs Actual](docs/images/predicted_vs_actual.png)
+
+*Yeah, that scatter plot is pretty messy. The model's trying, but it's not quite there yet.*
 
 ![Feature Importance](docs/images/feature_importance.png)
 
@@ -42,195 +46,158 @@ Here's the honest truth about how our model performs:
 
 ---
 
-### What Does This Project Do?
+## What Even Is This?
 
-Imagine you're a teacher listening to students speak English. You'd notice things like:
-- Do they use the right verb tenses?
-- Are their sentences complete?
-- Do they make grammar mistakes?
+Okay so here's the deal. You know how when you're learning a language, teachers listen to you speak and grade your grammar? This is trying to automate that.
 
-This project tries to automate that process. Here's how it works:
+The process is pretty straightforward:
+1. **Listen** 👂 - Turn audio into text using Whisper (OpenAI's speech-to-text thing)
+2. **Clean** 🧹 - Get rid of "um"s and "uh"s and stutters (but NOT grammar mistakes—we want to score what they actually said)
+3. **Analyze** 🔍 - Count grammar errors, look at sentence structure, all that jazz
+4. **Score** 📊 - Predict a score from 1 (oof) to 5 (nice)
+5. **Explain** 💡 - Show what mattered (so it's not a complete mystery)
 
-1. **Listen** 👂 - Converts audio recordings to text using OpenAI's Whisper (the same tech behind ChatGPT's voice features)
-2. **Clean** 🧹 - Removes "um"s, "uh"s, and stutters (but doesn't "fix" grammar—we want to score what they actually said)
-3. **Analyze** 🔍 - Looks for grammar errors, sentence structure, and other linguistic patterns
-4. **Score** 📊 - Predicts a grammar score from 1 (needs work) to 5 (excellent)
-5. **Explain** 💡 - Shows which features mattered most (so it's not a black box)
-
-**Why this matters:** Automated grammar scoring could help with language learning apps, job interviews, or educational assessments—but only if it's fair, transparent, and actually works well.
+Why does this matter? Well, imagine language learning apps that actually give useful feedback. Or job interviews where the system helps screen candidates. But only if it's actually fair and doesn't screw people over because of their accent or whatever.
 
 ---
 
-### What Are We Actually Measuring?
+## What Are We Actually Measuring?
 
-**What we're scoring:**
-- Grammar mistakes (wrong tenses, subject-verb agreement, etc.)
+**What we score:**
+- Grammar mistakes (wrong tenses, messed up subject-verb agreement, that kind of thing)
 - Sentence structure (complete sentences vs. fragments)
 - Basic English grammar rules
 
-**What we're NOT scoring:**
-- How smart someone is
-- Whether they'd be good at their job
-- Their accent or pronunciation (we're looking at grammar, not how they sound)
-- Whether they use "proper" British English vs. American English (both are valid!)
+**What we DON'T score:**
+- How smart you are (grammar ≠ intelligence)
+- Whether you'd be good at your job (that's a whole other thing)
+- Your accent or how you sound (we're looking at grammar, not pronunciation)
+- Whether you use British vs. American English (both are fine!)
 
 **How it should be used:**
-- As **one piece** of information, not the only thing that matters
-- For screening candidates who need English communication skills
-- Alongside other assessments (interviews, writing samples, etc.)
+- As ONE piece of info, not the only thing
+- For screening people who need English skills
+- Alongside other stuff (interviews, writing samples, etc.)
 
-**Important caveats:**
-- The system might be biased against certain accents (because speech-to-text isn't perfect)
+**The catch:**
+- The system might be biased against certain accents (speech-to-text isn't perfect)
 - It's not a replacement for human judgment
-- We need to be careful about fairness and not over-relying on automated scores
+- We gotta be careful about fairness
 
 ---
 
-### Methodology Summary
+## How I Built This (The Journey)
 
-The project is organised in **phases**, each mapped to code and notebooks.
+I split this into 10 phases because... well, it seemed organized at the time. Here's what happened:
 
-- **Phase 1 — Problem framing**
-  - `notebooks/01_problem_framing.ipynb` documents the construct, non-constructs, intended use, and ethical/automation risks (no code).
+**Phase 1: Figure Out What We're Doing** 📝
+First, I had to actually define what "grammar" means here. And what it doesn't mean. And what could go wrong ethically. That part was important.
 
-- **Phase 2 — Dataset exploration**
-  - `notebooks/02_data_exploration.ipynb` loads `data/train.csv`, examines **score distributions**, and explores audio duration vs. score.
-  - Includes **qualitative listening notes** across low/medium/high score bands.
+**Phase 2: Look at the Data** 📊
+I loaded up the training data and just... looked at it. What do the scores look like? Are there patterns? What does a low score sound like vs. a high score?
 
-- **Phase 3 — ASR pipeline**
-  - `src/asr.py` implements **Whisper-based transcription** (e.g., `small` model), with:
-    - Configurable decoding parameters in `src/config.py`.
-    - **Caching** to `data/asr_cache/asr_[train|test].csv`.
-    - Error logging for problematic files.
-  - `notebooks/03_asr_analysis.ipynb` inspects transcript quality and discusses how ASR errors can inflate or mask grammar errors.
+**Phase 3: Speech to Text** 🎤→📝
+Used Whisper to transcribe everything. This took forever. Also, Whisper makes mistakes sometimes, especially with accents. That's a problem we'll come back to.
 
-- **Phase 4 — Spoken text cleaning**
-  - `src/text_cleaning.py` implements **minimal, non-corrective cleaning**:
-    - Whitespace/case normalisation.
-    - Removal of **non-lexical fillers** (“uh”, “um”, etc.).
-    - Conservative collapse of **stutter-like repetitions**.
-    - Conservative trimming of **very short false starts**.
-  - Each rule is documented with **assessment rationale**: remove performance noise, never “fix” grammar.
+**Phase 4: Clean It Up** 🧹
+Removed "um"s, "uh"s, stutters. But I was careful NOT to fix grammar mistakes—if someone says "he go" instead of "he goes", I keep it as "he go" because that's what they actually said.
 
-- **Phase 5 — Feature engineering**
-  - `src/feature_engineering.py` extracts **interpretable grammar features** from cleaned transcripts:
-    - Grammar error counts and **error density per 100 tokens** using `language_tool_python`.
-    - Sentence and clause metrics (number of clauses, subordinate clauses, fragments, ratios) using spaCy.
-    - POS-based patterns (verb ratios, subject pronouns, etc.).
-  - `notebooks/04_feature_engineering.ipynb` explains each feature and shows **feature distributions**, connecting them to human judgment.
+**Phase 5: Extract Features** 🔍
+Turned text into numbers. How many grammar errors? Are sentences complete? How complex is the structure? Stuff like that.
 
-- **Phase 6 — Baseline modelling**
-  - `src/model.py` implements a **Ridge regression** baseline:
-    - Uses only **grammar features** (no deep embeddings).
-    - Fixes random seeds and uses **K-fold cross-validation**.
-    - Provides **feature importance** (standardised coefficients) for interpretability.
-  - `notebooks/05_modeling.ipynb` trains the baseline, displays CV metrics, and interprets coefficients in linguistic terms.
+**Phase 6: Train a Model** 🤖
+Used Ridge Regression because it's simple and you can actually understand what it's doing. Not some deep learning black box.
 
-- **Phase 7 — Evaluation**
-  - `src/evaluation.py` provides:
-    - **Pearson** and **Spearman** correlations.
-    - **MAE** and **RMSE**.
-    - **Score-band error analysis** (low/medium/high).
-  - `notebooks/06_evaluation.ipynb` plots predicted vs. actual scores, residuals, and band-wise performance, and discusses alignment with human raters.
+**Phase 7: See How Bad It Is** 📈
+Spoiler: it's not perfect. But we measured it properly and figured out where it fails.
 
-- **Phase 8 — Error & bias analysis**
-  - `src/error_analysis.py`:
-    - Identifies **large-error cases** (e.g., |prediction – truth| ≥ 1.0).
-    - Joins with transcripts for **qualitative ASR vs. grammar** analysis.
-    - Supports analyses by **score band** and (optionally) response length.
-  - Error tables and qualitative insights are reported in `notebooks/06_evaluation.ipynb` and associated notes.
+**Phase 8: Analyze the Failures** 🔬
+Looked at cases where we were way off. Is it an ASR problem? A grammar problem? What's going on?
 
-- **Phase 9 — One controlled improvement**
-  - A **single additional modelling component** is introduced (e.g., a fixed transformer-based sentence embedding combined with grammar features in a Ridge model).
-  - The improvement is **strictly compared** to the baseline:
-    - Same data, same CV protocol.
-    - Metrics and band-wise errors.
-    - Trade-offs in **accuracy vs. interpretability / construct purity** are explicitly discussed.
+**Phase 9: Try to Make It Better** 🚀
+Added one improvement (could use better text embeddings maybe?). Compared it to baseline. Is it worth the added complexity? Sometimes yes, sometimes no.
 
-- **Phase 10 — Final model & submission**
-  - A final model is selected based on **performance, robustness, and interpretability**.
-  - `submission/generate_submission.py`:
-    - Loads the trained model and preprocessing.
-    - Ensures test ASR transcripts and cleaned text/features are computed.
-    - Generates a **competition-compatible** `submission.csv` (`filename,label`).
+**Phase 10: Generate Predictions** ✅
+Trained final model, generated predictions for test set, created submission file. Done.
+
+Each phase has a notebook if you want to see the gory details.
 
 ---
 
-### What Features Matter Most?
+## What Features Actually Matter?
 
-The model looks at 23 different grammar features. Here's what it found most important:
+The model looks at 23 different things. Here's what it thinks is important:
 
-**Features that predict HIGHER scores:**
-- More tokens (longer responses tend to score higher)
+**Things that predict HIGHER scores:**
+- More tokens (longer responses = higher scores, usually)
 - More subordinate clauses (complex sentences)
-- Agreement errors per 100 tokens (surprisingly, this predicts higher scores—maybe because longer responses have more opportunities for errors?)
+- Agreement errors per 100 tokens (weirdly, this predicts higher scores? Maybe because longer responses have more room for errors?)
 
-**Features that predict LOWER scores:**
-- Total grammar errors (makes sense!)
-- Verb tense errors (also makes sense!)
-- Number of subordinate clauses (wait, this contradicts the above? That's interesting...)
+**Things that predict LOWER scores:**
+- Total grammar errors (duh)
+- Verb tense errors (also duh)
+- Number of subordinate clauses (wait, this contradicts the thing above? That's... interesting)
 
-**The takeaway**: Grammar scoring is complicated! Some features matter in unexpected ways. That's why we need to be careful and not over-interpret the results.
+So yeah, grammar scoring is complicated. Some features matter in weird ways. That's why we gotta be careful and not over-interpret stuff.
 
-See the [detailed results](docs/results/) for the full feature importance analysis.
-
----
-
-### Error Analysis Highlights
-
-Error and bias analysis focuses on:
-
-- **Large disagreements** (e.g., |error| ≥ 1.0 points):
-  - Under-prediction of high-true scores often linked to **ASR dropping function words** or mis-segmenting sentences, inflating error density.
-  - Over-prediction of low-true scores when ASR partially **normalises tense/agreement errors**.
-- **Disfluency vs. grammar**:
-  - Some disfluent but grammatically sound responses may be under-scored if features conflate disfluency with incomplete syntax.
-  - Some fluent but errorful responses may be over-scored if complexity dominates error features.
-- **Regression to the mean**:
-  - Extremes (very low or high grammar scores) tend to be pulled toward the centre, reducing differentiation at critical boundaries.
-
-These patterns are used to motivate:
-
-- **Human review** for certain bands or flagged cases.
-- Cautious use of the model as **one indicator**, not a sole decision-maker.
+Check out [docs/results/](docs/results/) if you want the full breakdown.
 
 ---
 
-### ⚠️ Important Limitations & Ethical Considerations
+## Where It Messes Up
 
-Let's be honest about what this system can and can't do:
+I spent some time looking at where the model fails. Here's what I found:
 
-#### The Data Problem
-- **Small dataset**: We only have 409 examples to learn from. That's not a lot! The model is less confident at the extremes (scores near 1 or 5).
-- **Missing context**: We don't know people's backgrounds, accents, or demographics, so we can't directly check for fairness issues.
+**Big disagreements** (we're off by 1+ points):
+- Sometimes we under-score people with high scores because ASR dropped function words or messed up sentence boundaries
+- Sometimes we over-score people with low scores because ASR "fixed" their grammar mistakes (which is... not what we want)
 
-#### The Accent Bias Problem
-This is a **big deal** and we need to talk about it:
+**Disfluency vs. grammar:**
+- Some people are disfluent (lots of "um"s, stutters) but grammatically sound—we might under-score them
+- Some people are fluent but make lots of grammar errors—we might over-score them
 
-- **Speech-to-text isn't perfect**: If the transcription software (Whisper) makes mistakes transcribing someone's accent, our grammar score will be wrong—and it's not the speaker's fault!
-- **Real-world impact**: Someone with a non-native accent might get a lower score not because their grammar is bad, but because the speech-to-text misunderstood them.
-- **What we can do**: We try to be aware of this, but it's a fundamental limitation. Always have humans review borderline cases.
+**Regression to the mean:**
+- Extreme scores (very low or very high) tend to get pulled toward the middle. The model is conservative.
 
-#### The "Scope Creep" Problem
-- **Mission drift**: It's tempting to make the model score "how good the text sounds" instead of just grammar. We try to stick to grammar only, but it's a slippery slope.
-
-#### The "Don't Over-Rely on This" Problem
-- **Not a replacement for humans**: This should NEVER be the only thing used to make important decisions (like hiring or grading).
-- **Use it as a tool**: Think of it like spell-check—helpful, but not infallible.
-- **Always review edge cases**: If someone gets a very low or very high score, have a human double-check.
-
-#### How to Use This Ethically
-1. **Always have human oversight** - Don't automate away human judgment
-2. **Be transparent** - Tell people their scores are automated and explain the limitations
-3. **Watch for bias** - Monitor if certain groups consistently get different scores
-4. **Allow appeals** - People should be able to challenge automated scores
-5. **Use multiple methods** - Combine this with interviews, writing samples, etc.
+So the takeaway is: always have humans review edge cases. This thing isn't perfect.
 
 ---
 
-### Getting Started (5 Minutes)
+## The Problems (Let's Be Honest)
 
-Want to try it yourself? Here's how:
+Look, this system has issues. I'm not gonna sugarcoat it.
+
+**The data problem:**
+- Only 409 examples. That's... not a lot. The model is less confident at the extremes.
+- We don't know people's backgrounds, so we can't directly check for fairness.
+
+**The accent bias problem:**
+This is the big one. If Whisper (the speech-to-text) makes mistakes transcribing someone's accent, our grammar score will be wrong. And it's not the speaker's fault—it's the transcription software's fault. But they're the one who gets the bad score.
+
+Someone with a non-native accent might get a lower score not because their grammar is bad, but because Whisper misunderstood them. That's... not great.
+
+We try to be aware of this, but it's a fundamental limitation. Always have humans review borderline cases.
+
+**The "scope creep" problem:**
+It's tempting to make the model score "how good the text sounds" instead of just grammar. I tried to stick to grammar only, but it's a slippery slope.
+
+**The "don't over-rely on this" problem:**
+This should NEVER be the only thing used to make important decisions. Think of it like spell-check—helpful, but not infallible.
+
+If someone gets a very low or very high score, have a human double-check. Always.
+
+**How to use this ethically:**
+1. Always have human oversight
+2. Be transparent about limitations
+3. Watch for bias patterns
+4. Allow appeals
+5. Use multiple assessment methods
+
+---
+
+## Getting Started
+
+Want to try it? Here's how:
 
 1. **Get the code**
    ```bash
@@ -238,113 +205,97 @@ Want to try it yourself? Here's how:
    cd Grammar-scoring-engine
    ```
 
-2. **Install what you need**
+2. **Install stuff**
    ```bash
    pip install -r requirements.txt
    python -m spacy download en_core_web_sm
    ```
-   *Note: You'll also need Java installed for grammar checking, and FFmpeg for audio processing. See the installation guides if you run into issues.*
+   *Note: You'll need Java for grammar checking and FFmpeg for audio. There are guides in the repo if you get stuck.*
 
 3. **Add your data**
-   - Put your audio files in `data/train_audio/` and `data/test_audio/`
-   - Put your labels CSV in `data/train.csv`
-   - The data should come from the SHL competition (we can't use external datasets)
+   - Put audio files in `data/train_audio/` and `data/test_audio/`
+   - Put labels in `data/train.csv`
+   - Should be from the SHL competition (we can't use external datasets)
 
-4. **Train the model**
+4. **Train it**
    ```bash
    python train_baseline.py
    ```
-   *This will take a while—it needs to transcribe all the audio first!*
+   *This takes a while—it has to transcribe all the audio first.*
 
 5. **Generate predictions**
    ```bash
    python submission/generate_submission.py
    ```
-   *This creates a CSV file with predictions for all test audio files.*
 
-### Detailed Documentation
-
-- **Installation & Setup**: See [GITHUB_SETUP.md](GITHUB_SETUP.md)
-- **Methodology**: See notebooks in `notebooks/`
-- **Results**: See [docs/results/](docs/results/)
-- **Visualizations**: See [docs/images/](docs/images/)
+More details in the notebooks if you want to dig deeper.
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 grammar-scoring/
-├── src/                    # Core source code
-│   ├── asr.py             # Whisper-based ASR
-│   ├── text_cleaning.py   # Spoken language cleaning
-│   ├── feature_engineering.py  # Grammar features
-│   ├── model.py           # Ridge regression model
-│   └── evaluation.py      # Assessment metrics
-├── notebooks/             # Jupyter notebooks (phases 1-6)
-├── scripts/               # Utility scripts
-│   ├── generate_visualizations.py
-│   └── extract_results.py
+├── src/                    # The actual code
+│   ├── asr.py             # Speech to text
+│   ├── text_cleaning.py   # Clean up spoken language
+│   ├── feature_engineering.py  # Extract grammar features
+│   ├── model.py           # The model itself
+│   └── evaluation.py       # How well did we do?
+├── notebooks/             # Jupyter notebooks (the journey)
+├── scripts/               # Helper scripts
 ├── docs/                  # Documentation
-│   ├── images/           # Visualizations
+│   ├── images/           # Pretty pictures
 │   └── results/          # Results tables
-├── submission/            # Submission generation
+├── submission/            # Generate competition submissions
 ├── train_baseline.py      # Main training script
-└── requirements.txt       # Dependencies
+└── requirements.txt       # What you need to install
 ```
 
 ---
 
-## 🔧 What's Under the Hood?
+## The Tech Stack
 
-### The Tech Stack
+**Python stuff:**
+- Python 3.8+ (obviously)
+- Whisper (OpenAI) - turns speech into text
+- spaCy - analyzes sentence structure
+- LanguageTool - finds grammar mistakes
+- scikit-learn - the machine learning part
+- pandas, numpy - data wrangling
 
-- **Python 3.8+** - The programming language
-- **Whisper** (OpenAI) - Converts speech to text (it's really good at this!)
-- **spaCy** - Analyzes sentence structure and parts of speech
-- **LanguageTool** - Finds grammar mistakes (like a spell-checker for grammar)
-- **scikit-learn** - The machine learning library that trains our model
-- **pandas, numpy** - For handling data and doing math
+**External tools:**
+- FFmpeg - processes audio (Whisper needs this)
+- Java - LanguageTool runs on Java
 
-### External Tools You'll Need
-
-- **FFmpeg** - Processes audio files (Whisper needs this)
-- **Java** - LanguageTool runs on Java (like Minecraft, but for grammar checking)
-
-*Don't worry if this sounds complicated—there are installation guides in the repo to help you set everything up!*
+*Don't worry if this sounds complicated—there are installation guides to help you out.*
 
 ---
 
-## 📄 License
+## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🙏 Thanks & Credits
-
-This project wouldn't exist without:
-
-- **OpenAI** - For creating Whisper, the amazing speech-to-text system
-- **LanguageTool** - For the open-source grammar checking
-- **SHL** - For providing the competition dataset
-- **The open-source community** - For all the amazing Python libraries
+MIT License. Do whatever you want with it. See [LICENSE](LICENSE) for the legal stuff.
 
 ---
 
-## 💬 Questions? Found a Bug?
+## Thanks
 
-Feel free to:
-- Open an issue on GitHub if you find a bug or have a question
-- Check the notebooks for detailed explanations of each step
-- Read the code—it's well-documented and meant to be understandable!
+Shoutout to:
+- **OpenAI** - Whisper is amazing
+- **LanguageTool** - Open source grammar checking
+- **SHL** - For the competition dataset
+- **The open-source community** - For all the Python libraries that make this possible
 
 ---
 
-## 🎯 The Bottom Line
+## Questions? Found a Bug?
 
-This project is an attempt to automate grammar scoring in a **fair, transparent, and useful** way. It's not perfect (no automated system is!), but we've tried to be honest about its limitations and build it in a way that's explainable and ethical.
+Open an issue on GitHub! I'm happy to help (or at least try to).
 
-**Remember**: This is a tool to help humans, not replace them. Always use it responsibly! 🚀
+---
 
+## The Bottom Line
 
+This is an attempt to automate grammar scoring in a fair, transparent way. It's not perfect (no automated system is), but I tried to be honest about the limitations and build it in a way that's explainable.
+
+**Remember**: This is a tool to help humans, not replace them. Use it responsibly. 🚀

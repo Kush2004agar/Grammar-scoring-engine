@@ -101,6 +101,7 @@ def transcribe_split(
     total = len(audio_paths)
 
     for idx, audio_path in enumerate(audio_paths, start=1):
+        # Get filename without extension (e.g., "audio_1" not "audio_1.wav")
         filename = audio_path.stem
         row: dict = {
             "filename": filename,
