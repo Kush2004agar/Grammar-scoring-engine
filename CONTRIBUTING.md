@@ -29,5 +29,5 @@ We try to keep the code:
 
 ## Questions?
 
-Just ask! Open an issue or reach out. We're friendly, I promise. 😊
+Just ask! Open an issue or reach out. We're friendly, I promise. 
 
