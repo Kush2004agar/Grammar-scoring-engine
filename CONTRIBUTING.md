@@ -4,17 +4,17 @@ Thanks for your interest in contributing! 🎉
 
 ## How Can You Help?
 
-### 🐛 Found a Bug?
+###  Found a Bug?
 - Open an issue describing what went wrong
 - Include steps to reproduce the bug
 - Share any error messages you saw
 
-### 💡 Have an Idea?
+###  Have an Idea?
 - Open an issue with your suggestion
 - Explain why it would be useful
 - We'd love to hear your thoughts!
 
-### 🔧 Want to Fix Something?
+###  Want to Fix Something?
 1. Fork the repository
 2. Make your changes
 3. Test that everything still works
@@ -29,5 +29,5 @@ We try to keep the code:
 
 ## Questions?
 
-Just ask! Open an issue or reach out. We're friendly, I promise. 😊
+Just ask! Open an issue or reach out. We're friendly, I promise. 
 
