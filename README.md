@@ -24,11 +24,7 @@ Let me be straight with you. The results are... mixed.
 
 Yeah, the correlation is basically zero. That's... not ideal. But the MAE is decent—we're usually within 0.6 points, which isn't the worst thing in the world. The model definitely needs work, but it's a start.
 
-**What we built:**
-- Ridge Regression (simple but you can actually understand it)
-- 23 different grammar features (error counts, sentence stuff, etc.)
-- Trained on 409 examples (not a ton, but it's what we had)
-- Tested 5 different ways to make sure we're not just lucky
+What we built: Ridge Regression (simple but you can actually understand it), 23 different grammar features, trained on 409 examples, tested 5 different ways to make sure we're not just lucky.
 
 ![Score Distribution](docs/images/score_distribution.png)
 
@@ -210,7 +206,7 @@ Want to try it? Here's how:
    pip install -r requirements.txt
    python -m spacy download en_core_web_sm
    ```
-   *Note: You'll need Java for grammar checking and FFmpeg for audio. There are guides in the repo if you get stuck.*
+   You'll also need Java (for grammar checking) and FFmpeg (for audio). There are guides in the repo if you get stuck.
 
 3. **Add your data**
    - Put audio files in `data/train_audio/` and `data/test_audio/`
@@ -221,7 +217,7 @@ Want to try it? Here's how:
    ```bash
    python train_baseline.py
    ```
-   *This takes a while—it has to transcribe all the audio first.*
+   This takes a while—it has to transcribe all the audio first.
 
 5. **Generate predictions**
    ```bash
@@ -264,11 +260,11 @@ grammar-scoring/
 - scikit-learn - the machine learning part
 - pandas, numpy - data wrangling
 
-**External tools:**
-- FFmpeg - processes audio (Whisper needs this)
-- Java - LanguageTool runs on Java
+**Other things you need:**
+- FFmpeg (Whisper needs it to process audio)
+- Java (LanguageTool runs on Java)
 
-*Don't worry if this sounds complicated—there are installation guides to help you out.*
+Installation guides are in the repo if you need help setting these up.
 
 ---
 
@@ -284,18 +280,14 @@ Shoutout to:
 - **OpenAI** - Whisper is amazing
 - **LanguageTool** - Open source grammar checking
 - **SHL** - For the competition dataset
-- **The open-source community** - For all the Python libraries that make this possible
+- **Everyone who made the Python libraries** - Couldn't have done this without you
 
 ---
 
-## Questions? Found a Bug?
+## Got Issues?
 
-Open an issue on GitHub! I'm happy to help (or at least try to).
+Found a bug? Have a question? Open an issue on GitHub and I'll take a look.
 
 ---
 
-## The Bottom Line
-
-This is an attempt to automate grammar scoring in a fair, transparent way. It's not perfect (no automated system is), but I tried to be honest about the limitations and build it in a way that's explainable.
-
-**Remember**: This is a tool to help humans, not replace them. Use it responsibly. 🚀
+Anyway, that's the project. It's not perfect, but I tried to build it in a way that makes sense and is actually explainable. If you end up using it, just... be thoughtful about it, you know? Don't let it make important decisions on its own.
