@@ -1,13 +1,15 @@
 """
-Standalone script to train and save the baseline grammar scoring model.
+Train the grammar scoring model from scratch.
 
-This script:
-1. Loads train labels and audio files
-2. Runs ASR (or loads cached transcripts)
-3. Cleans transcripts
-4. Extracts grammar features
-5. Trains a Ridge regression model
-6. Saves the model artifacts for submission generation
+This script does the whole pipeline:
+1. Loads the training data (labels + audio files)
+2. Converts audio to text using Whisper (or uses cached transcripts if available)
+3. Cleans up the text (removes "um"s, stutters, etc.)
+4. Extracts grammar features (error counts, sentence structure, etc.)
+5. Trains a Ridge regression model to predict grammar scores
+6. Saves everything so you can generate predictions later
+
+Run this before generating submissions!
 
 Usage:
     python train_baseline.py

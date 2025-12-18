@@ -1,11 +1,12 @@
 """
-Data loading utilities for the grammar scoring project.
+Simple functions to load the data.
 
-This module is intentionally simple and focuses on:
-- Loading SHL labels from ``data/train.csv``.
-- Enumerating audio files in train/test folders.
-- Providing joined views that downstream steps (ASR, features, modeling)
-  can rely on.
+This module handles:
+- Loading the training labels (which audio files got which scores)
+- Finding all the audio files in train/test folders
+- Making sure everything is organized and easy to access
+
+Nothing fancy here—just getting the data ready for the rest of the pipeline.
 """
 
 from __future__ import annotations

@@ -1,10 +1,12 @@
 """
-Evaluation utilities for grammar scoring models.
+Evaluate how well the model performs.
 
-We focus on assessment-aligned metrics and diagnostics:
-- Pearson correlation with human scores.
-- RMSE / MAE for magnitude of error.
-- Score-band analysis to see where the model is harsh or lenient.
+We use metrics that make sense for assessment:
+- Correlation: Does the model agree with human scores?
+- MAE/RMSE: How far off are the predictions on average?
+- Band analysis: Is the model too harsh or too lenient for certain score ranges?
+
+The goal is to understand not just "is it good?" but "where does it fail?"
 """
 
 from __future__ import annotations

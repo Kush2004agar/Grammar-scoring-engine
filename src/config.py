@@ -1,8 +1,12 @@
 """
-Configuration for the grammar scoring project.
+All the configuration settings for the project.
 
-This module centralizes paths, model settings, and random seeds to ensure
-reproducibility and easy review by assessment scientists.
+This is where we keep:
+- File paths (where data lives, where to save things)
+- Model settings (which Whisper model to use, etc.)
+- Random seeds (so results are reproducible)
+
+Everything is in one place so it's easy to change and understand.
 """
 
 from __future__ import annotations
