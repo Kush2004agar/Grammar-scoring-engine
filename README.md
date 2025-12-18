@@ -1,4 +1,4 @@
-# Grammar Scoring Engine 🎤
+# Grammar Scoring Engine
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -47,11 +47,11 @@ What we built: Ridge Regression (simple but you can actually understand it), 23 
 Okay so here's the deal. You know how when you're learning a language, teachers listen to you speak and grade your grammar? This is trying to automate that.
 
 The process is pretty straightforward:
-1. **Listen** 👂 - Turn audio into text using Whisper (OpenAI's speech-to-text thing)
-2. **Clean** 🧹 - Get rid of "um"s and "uh"s and stutters (but NOT grammar mistakes—we want to score what they actually said)
-3. **Analyze** 🔍 - Count grammar errors, look at sentence structure, all that jazz
-4. **Score** 📊 - Predict a score from 1 (oof) to 5 (nice)
-5. **Explain** 💡 - Show what mattered (so it's not a complete mystery)
+1. **Listen** - Turn audio into text using Whisper (OpenAI's speech-to-text thing)
+2. **Clean** - Get rid of "um"s and "uh"s and stutters (but NOT grammar mistakes—we want to score what they actually said)
+3. **Analyze** - Count grammar errors, look at sentence structure, all that jazz
+4. **Score** - Predict a score from 1 (oof) to 5 (nice)
+5. **Explain** - Show what mattered (so it's not a complete mystery)
 
 Why does this matter? Well, imagine language learning apps that actually give useful feedback. Or job interviews where the system helps screen candidates. But only if it's actually fair and doesn't screw people over because of their accent or whatever.
 
@@ -86,34 +86,34 @@ Why does this matter? Well, imagine language learning apps that actually give us
 
 I split this into 10 phases because... well, it seemed organized at the time. Here's what happened:
 
-**Phase 1: Figure Out What We're Doing** 📝
+**Phase 1: Figure Out What We're Doing**
 First, I had to actually define what "grammar" means here. And what it doesn't mean. And what could go wrong ethically. That part was important.
 
-**Phase 2: Look at the Data** 📊
+**Phase 2: Look at the Data**
 I loaded up the training data and just... looked at it. What do the scores look like? Are there patterns? What does a low score sound like vs. a high score?
 
-**Phase 3: Speech to Text** 🎤→📝
+**Phase 3: Speech to Text**
 Used Whisper to transcribe everything. This took forever. Also, Whisper makes mistakes sometimes, especially with accents. That's a problem we'll come back to.
 
-**Phase 4: Clean It Up** 🧹
+**Phase 4: Clean It Up**
 Removed "um"s, "uh"s, stutters. But I was careful NOT to fix grammar mistakes—if someone says "he go" instead of "he goes", I keep it as "he go" because that's what they actually said.
 
-**Phase 5: Extract Features** 🔍
+**Phase 5: Extract Features**
 Turned text into numbers. How many grammar errors? Are sentences complete? How complex is the structure? Stuff like that.
 
-**Phase 6: Train a Model** 🤖
+**Phase 6: Train a Model**
 Used Ridge Regression because it's simple and you can actually understand what it's doing. Not some deep learning black box.
 
-**Phase 7: See How Bad It Is** 📈
+**Phase 7: See How Bad It Is**
 Spoiler: it's not perfect. But we measured it properly and figured out where it fails.
 
-**Phase 8: Analyze the Failures** 🔬
+**Phase 8: Analyze the Failures**
 Looked at cases where we were way off. Is it an ASR problem? A grammar problem? What's going on?
 
-**Phase 9: Try to Make It Better** 🚀
+**Phase 9: Try to Make It Better**
 Added one improvement (could use better text embeddings maybe?). Compared it to baseline. Is it worth the added complexity? Sometimes yes, sometimes no.
 
-**Phase 10: Generate Predictions** ✅
+**Phase 10: Generate Predictions**
 Trained final model, generated predictions for test set, created submission file. Done.
 
 Each phase has a notebook if you want to see the gory details.
