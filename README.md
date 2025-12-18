@@ -192,24 +192,38 @@ These patterns are used to motivate:
 
 ### Limitations & Ethical Considerations
 
-- **Data limitations**:
-  - Only 409 labelled train samples, with few extreme scores → higher uncertainty at 1.0–1.5 and 4.5–5.0.
-  - No explicit demographic or accent labels → fairness can only be indirectly assessed.
+This project explicitly addresses ethical risks and limitations of automated grammar scoring:
 
-- **ASR dependence**:
-  - Grammar scores are effectively tied to the **grammar of ASR transcripts**, not ground-truth speech.
-  - Accents and audio quality can lead to **systematic transcription errors** and thus biased grammar features.
+#### Data Limitations
+- **Small sample size**: Only 409 labelled training samples, with few extreme scores → higher uncertainty at 1.0–1.5 and 4.5–5.0 score ranges.
+- **No demographic labels**: No explicit demographic or accent labels → fairness can only be indirectly assessed through error analysis.
 
-- **Construct drift**:
-  - Even with a grammar-focused baseline, any use of embeddings risks expanding the construct towards general “textual well-formedness”.
-  - This drift is monitored and explicitly discussed; the **grammar-only model** is retained as a construct-anchoring baseline.
+#### ASR Bias Risk
+- **Transcription dependence**: Grammar scores are effectively tied to the **grammar of ASR transcripts**, not ground-truth speech.
+- **Accent bias**: Accents and audio quality can lead to **systematic transcription errors** and thus biased grammar features.
+  - Non-native accents may be transcribed with different error patterns than native speakers
+  - Audio quality issues can cause ASR to drop function words or mis-segment sentences
+- **Fairness concerns**: The model may systematically under-score or over-score speakers with certain accent patterns due to ASR limitations.
 
-- **Use in high-stakes decisions**:
-  - The model is not intended to replace human judgment.
-  - It should be deployed, if at all, as **one component** in a broader system with:
-    - Transparent documentation,
-    - Ongoing validation and monitoring,
-    - Mechanisms for human review and appeal.
+#### Construct Drift
+- **Scope expansion**: Even with a grammar-focused baseline, any use of embeddings risks expanding the construct towards general "textual well-formedness" rather than pure grammatical accuracy.
+- **Mitigation**: This drift is monitored and explicitly discussed; the **grammar-only model** is retained as a construct-anchoring baseline.
+
+#### Over-Reliance on Automation
+- **Not a replacement**: The model is **not intended to replace human judgment** in high-stakes decisions.
+- **Deployment guidelines**: If deployed, it should be used as **one component** in a broader assessment system with:
+  - Transparent documentation of limitations
+  - Ongoing validation and monitoring
+  - Mechanisms for human review and appeal
+  - Clear communication to stakeholders about model limitations
+- **Critical boundaries**: Extreme scores (very low or very high) should trigger human review, as the model shows regression toward the mean.
+
+#### Recommendations for Ethical Use
+1. **Human-in-the-loop**: Always include human review for borderline cases and flagged errors
+2. **Transparency**: Clearly communicate model limitations to all stakeholders
+3. **Monitoring**: Continuously monitor for systematic bias patterns
+4. **Appeal process**: Provide mechanisms for candidates to appeal automated scores
+5. **Multi-method assessment**: Use grammar scores as one component, not the sole decision-maker
 
 ---
 
