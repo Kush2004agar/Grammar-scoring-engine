@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Data files (large, provided by Kaggle)
+data/train_audio/
+data/test_audio/
+data/asr_cache/
+data/models/
+data/features/
+data/logs/
+
+# Generated submissions (don't commit predictions)
+submission/submission.csv
+submission/*.csv
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary/helper files
+download_ffmpeg.py
+INSTALL_FFMPEG.md
+
+# LanguageTool cache (large, auto-downloaded)
+.language_tool/
+
